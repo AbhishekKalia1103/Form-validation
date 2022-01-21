@@ -1,0 +1,215 @@
+<html>
+    <head>
+        <title>
+            Reg. Form Using local storage js-part4
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      </head>
+      <body>
+      
+      <div class="container">
+        <div class="col-sm-6" style="border: 1px solid gray;">
+        <h2>Reg. Form</h2>
+        <form action="#">
+            <div class="form-group">
+                <label for="name">First Name:</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+              </div>
+              <div class="form-group">
+                <label for="secondname">Second Name:</label>
+                <input type="text" class="form-control" id="secondname" placeholder="Enter second name" name="name">
+              </div>
+
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="psw" placeholder="Enter password" name="pwd">
+          </div>
+
+          <div class="form-group">
+            <label for="cnfpwd">Confirm Password:</label>
+            <input type="password" class="form-control" id="cnfpsw" placeholder="Enter password" name="cnfpwd">
+          </div>
+          <div class="form-group">
+            <label for="number">Mobile Number:</label>
+            <input type="number" class="form-control" id="number" placeholder="Enter Number" name="number">
+          </div>
+
+
+
+         
+          <button type="button" onclick="saveData()" id="save_btn" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+      <div class="col-sm-6" style="border: 1px solid gray;">
+        <h2 style="text-align: center;">Users Table</h2>
+        <div class="row">
+          <div class="col-sm-4" style="background-color: #ffdc5c;padding: 10px;">Name</div>
+          <div class="col-sm-4" style="background-color: #38b7ff;padding: 10px;">Email</div>
+          <div class="col-sm-4" style="background-color: #ff914d;padding: 10px;">Password</div>
+
+        </div>
+        <div id="showUsers"></div>
+      </div>
+      </div>
+      
+      </body>
+      <script>
+        showData();
+function saveData()
+{
+	validation();
+let name,email,psw, secondname,cnfpsw, number ;
+name=document.getElementById("name").value;
+secondname=document.getElementById("secondname").value;
+email=document.getElementById("email").value;
+
+psw=document.getElementById("psw").value;
+cnfpsw=document.getElementById("cnfpsw").value;
+number =document.getElementById("number").value;
+
+let user_records=new Array();
+user_records=JSON.parse(localStorage.getItem("users"))?JSON.parse(localStorage.getItem("users")):[]
+if(user_records.some((v)=>{return v.email==email}))
+{
+  alert("duplicate data");
+}
+else
+{
+  user_records.push({
+  "name":name,
+  "secondname" : secondname,
+  "email":email,
+  "psw":psw,
+  "number" : number,
+})
+localStorage.setItem("users",JSON.stringify(user_records));
+}
+showData();
+}
+
+function showData()
+{
+  document.getElementById("showUsers").innerHTML="";
+  let user_records=new Array();
+user_records=JSON.parse(localStorage.getItem("users"))?JSON.parse(localStorage.getItem("users")):[]
+  if(user_records)
+  {
+    for(let i=0;i<user_records.length;i++)
+    {
+      let addDiv=document.createElement('div');
+  addDiv.className="row";
+  addDiv.innerHTML='  <div class="col-sm-4" style="padding: 10px;">'+user_records[i].name+'</div><div class="col-sm-4" style="padding: 10px;">'+user_records[i].email+'</div><div class="col-sm-4" style="padding: 10px;">'+user_records[i].psw+'</div>';
+  document.getElementById("showUsers").appendChild(addDiv);
+
+    }
+  }
+  }
+  function validation(){
+
+			let name,email,psw, secondname,cnfpsw, number ;
+		name=document.getElementById("name").value;
+		secondname=document.getElementById("secondname").value;
+		email=document.getElementById("email").value;
+
+		psw=document.getElementById("psw").value;
+		cnfpsw=document.getElementById("cnfpsw").value;
+		number =document.getElementById("number").value;
+
+
+
+
+
+			if(name == ""){
+				document.getElementById('name').innerHTML =" ** Please fill the username field";
+				return false;
+			}
+			if((name.length < 2) || (name.length > 20)) {
+				document.getElementById('name').innerHTML =" ** Username lenght must be between 2 and 20";
+				return false;	
+			}
+			if(!isNaN(name)){
+				document.getElementById('name').innerHTML =" ** only characters are allowed";
+				return false;
+			}
+
+			if(secondname == ""){
+				document.getElementById('secondname').innerHTML =" ** Please fill the username field";
+				return false;
+			}
+			if((secondname.length <= 2) || (secondname.length > 20)) {
+				document.getElementById('secondname').innerHTML =" ** Username lenght must be between 2 and 20";
+				return false;	
+			}
+			if(!isNaN(secondname)){
+				document.getElementById('secondname').innerHTML =" ** only characters are allowed";
+				return false;
+			}
+
+
+
+			if(psw == ""){
+				document.getElementById('psw').innerHTML =" ** Please fill the password field";
+				return false;
+			}
+			if((psw.length <= 5) || (psw.length > 20)) {
+				document.getElementById('psw').innerHTML =" ** Passwords lenght must be between  5 and 20";
+				return false;	
+			}
+
+
+			if(psw!=cnfpsw){
+				document.getElementById('cnfpsw').innerHTML =" ** Password does not match the confirm password";
+				return false;
+			}
+
+
+
+			if(cnfpsw == ""){
+				document.getElementById('cnfpsw').innerHTML =" ** Please fill the confirmpassword field";
+				return false;
+			}
+
+
+
+			if(number == ""){
+				document.getElementById('number').innerHTML =" ** Please fill the mobile NUmber field";
+				return false;
+			}
+			if(isNaN(number)){
+				document.getElementById('number').innerHTML =" ** user must write digits only not characters";
+				return false;
+			}
+			if(number.length!=10){
+				document.getElementById('number').innerHTML =" ** Mobile Number must be 10 digits only";
+				return false;
+			}
+
+
+
+			if(email == ""){
+				document.getElementById('email').innerHTML =" ** Please fill the email idx` field";
+				return false;
+			}
+			if(email.indexOf('@') <= 0 ){
+				document.getElementById('email').innerHTML =" ** @ Invalid Position";
+				return false;
+			}
+
+			if((email.charAt(email.length-4)!='.') && (emails.charAt(emails.length-3)!='.')){
+				document.getElementById('email').innerHTML =" ** . Invalid Position";
+				return false;
+			}
+		}
+
+
+          </script>
+      </html>
+      
